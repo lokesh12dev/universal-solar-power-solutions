@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { asset } from "@/lib/assets";
 
 /* SectionVideo — video swap-in for ONE image box, mirroring MaskReveal's
    box classes and reveal animation exactly (frame, veil, settle, rounding).
@@ -50,11 +51,11 @@ export function SectionVideo({
   return (
     <figure ref={ref} className={`maskreveal mask-${dir} ${inView ? "mask-on" : ""} ${className}`} style={{ aspectRatio: ratio }}>
       <span className="maskreveal-frame">
-        <Image src={poster} alt={alt} width={1600} height={900} sizes="(max-width: 1024px) 100vw, 50vw" className="maskreveal-img" />
+        <Image src={asset(poster)} alt={alt} width={1600} height={900} sizes="(max-width: 1024px) 100vw, 50vw" className="maskreveal-img" />
         {mount && !failed && (
           <video
             className="maskreveal-video"
-            poster={poster}
+            poster={asset(poster)}
             autoPlay
             muted
             loop
@@ -65,8 +66,8 @@ export function SectionVideo({
             aria-hidden="true"
             onError={() => setFailed(true)}
           >
-            <source src={desktopSrc} type="video/mp4" media="(min-width: 768px)" />
-            <source src={mobileSrc} type="video/mp4" />
+            <source src={asset(desktopSrc)} type="video/mp4" media="(min-width: 768px)" />
+            <source src={asset(mobileSrc)} type="video/mp4" />
           </video>
         )}
         <span className="maskreveal-veil" aria-hidden="true" />

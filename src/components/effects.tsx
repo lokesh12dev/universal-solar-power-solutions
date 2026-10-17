@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, cloneElement, isValidElement } from "react";
 import Image from "next/image";
 import { ArrowUp } from "lucide-react";
+import { asset } from "@/lib/assets";
 
 export function Reveal({ children, className = "", delay = 0, dir = "up" }: { children: React.ReactNode; className?: string; delay?: number; dir?: "up" | "left" | "right" | "zoom" }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -174,7 +175,7 @@ export function MaskReveal({ src, alt, width, height, sizes, caption, className 
   return (
     <figure ref={ref} className={`maskreveal mask-${dir} ${className}`} style={{ ["--mask-delay" as string]: `${delay}ms` }}>
       <span className="maskreveal-frame">
-        <Image src={src} alt={alt} width={width} height={height} sizes={sizes} loading={eager ? undefined : "lazy"} priority={eager || undefined} fetchPriority={eager ? "high" : undefined} className={`maskreveal-img ${imgClassName}`} />
+        <Image src={asset(src)} alt={alt} width={width} height={height} sizes={sizes} loading={eager ? undefined : "lazy"} priority={eager || undefined} fetchPriority={eager ? "high" : undefined} className={`maskreveal-img ${imgClassName}`} />
         <span className="maskreveal-veil" aria-hidden="true" />
       </span>
       {caption && <figcaption className="maskreveal-cap">{caption}</figcaption>}

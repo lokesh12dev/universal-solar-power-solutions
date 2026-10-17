@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Container, Breadcrumbs, CTAButton } from "@/components/ui";
 import { Sequence, Step, TechLine } from "@/components/effects";
 import { products } from "@/content/products";
+import { asset } from "@/lib/assets";
 
 export async function generateStaticParams() { return products.map((p) => ({ slug: p.slug })); }
 
@@ -31,7 +32,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <Container>
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Systems", href: "/products" }, { label: p.name }]} />
         <div className="mt-6 grid gap-10 lg:grid-cols-2">
-          <Image src={p.image} alt={p.imageAlt} width={900} height={600} priority fetchPriority="high" sizes="(max-width: 1024px) 100vw, 50vw" className="h-[260px] w-full rounded-[2rem] border border-line object-cover shadow-xl sm:h-[360px]" />
+          <Image src={asset(p.image)} alt={p.imageAlt} width={900} height={600} priority fetchPriority="high" sizes="(max-width: 1024px) 100vw, 50vw" className="h-[260px] w-full rounded-[2rem] border border-line object-cover shadow-xl sm:h-[360px]" />
           <div className="min-w-0">
             <Sequence>
               <Step>

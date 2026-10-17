@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { asset } from "@/lib/assets";
 
 function LogoTile({ size = 40, animate = false }: { size?: number; animate?: boolean }) {
   const inner = Math.round(size * 0.88);
@@ -9,7 +10,7 @@ function LogoTile({ size = 40, animate = false }: { size?: number; animate?: boo
       aria-hidden="true"
     >
       <Image
-        src="/images/legacy/logo.png"
+        src={asset("/images/legacy/logo.png")}
         alt=""
         width={128}
         height={128}

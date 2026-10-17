@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: {
     type: "website", siteName: site.brand, title: `${site.brand} | Rooftop Solar EPC in Chennai`,
-    description: site.description, images: [{ url: "/images/legacy/project4.jpeg", width: 1200, height: 630, alt: "Rooftop solar array installed by Universal Solar" }],
+    description: site.description, images: [{ url: `${site.url}/images/legacy/project4.jpeg`, width: 1200, height: 630, alt: "Rooftop solar array installed by Universal Solar" }],
   },
   twitter: { card: "summary_large_image", title: site.brand, description: site.description },
   robots: { index: true, follow: true },

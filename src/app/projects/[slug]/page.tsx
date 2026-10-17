@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { Container, Breadcrumbs, CTAButton } from "@/components/ui";
 import { CaseStudyView } from "@/components/CaseStudyView";
 import { projects } from "@/content/projects";
+import { asset } from "@/lib/assets";
 
 export async function generateStaticParams() { return projects.map((p) => ({ slug: p.slug })); }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -25,7 +26,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <Container>
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Projects", href: "/projects" }, { label: p.title }]} />
         <div className="mt-6 grid gap-10 lg:grid-cols-2">
-          <Image src={p.image} alt={p.imageAlt} width={900} height={600} priority fetchPriority="high" sizes="(max-width: 1024px) 100vw, 50vw" className="h-[260px] w-full rounded-[2rem] border border-line object-cover shadow-xl sm:h-[380px]" />
+          <Image src={asset(p.image)} alt={p.imageAlt} width={900} height={600} priority fetchPriority="high" sizes="(max-width: 1024px) 100vw, 50vw" className="h-[260px] w-full rounded-[2rem] border border-line object-cover shadow-xl sm:h-[380px]" />
           <div className="min-w-0">
             <p className="text-xs font-bold uppercase tracking-widest text-royal">{p.category} · {p.location}</p>
             <h1 className="mt-2 font-display break-words text-3xl sm:text-4xl font-extrabold text-navy">{p.title}</h1>
@@ -43,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((r) => (
               <Link key={r.slug} href={`/projects/${r.slug}`} className="glow-card link-arrow group block h-full overflow-hidden rounded-3xl border border-line bg-white">
-                <Image src={r.image} alt={r.imageAlt} width={700} height={450} loading="lazy" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="h-44 w-full object-cover transition duration-700 group-hover:scale-105" />
+                <Image src={asset(r.image)} alt={r.imageAlt} width={700} height={450} loading="lazy" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="h-44 w-full object-cover transition duration-700 group-hover:scale-105" />
                 <div className="p-5">
                   <p className="text-xs font-bold uppercase tracking-widest text-royal">{r.category} · {r.location}</p>
                   <h3 className="mt-1 flex items-center gap-1.5 font-display text-lg font-extrabold text-navy">{r.title} <ArrowRight size={17} className="shrink-0 text-royal" aria-hidden="true" /></h3>

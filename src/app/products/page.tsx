@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Container, SectionHeading, Breadcrumbs } from "@/components/ui";
 import { Reveal, Sequence, Step, TechLine } from "@/components/effects";
 import { products } from "@/content/products";
+import { asset } from "@/lib/assets";
 
 export const metadata: Metadata = { title: "Solar Systems & Equipment", description: "Engineered solar systems and equipment — panels, inverters, storage, structures. Makes confirmed in your proposal.", alternates: { canonical: "/products" }, openGraph: { title: "Solar Systems & Equipment", description: "Engineered solar systems and equipment — panels, inverters, storage, structures. Makes confirmed in your proposal.", url: "/products", type: "website" }, twitter: { card: "summary_large_image", title: "Solar Systems & Equipment", description: "Engineered solar systems and equipment — panels, inverters, storage, structures. Makes confirmed in your proposal." } };
 
@@ -20,7 +21,7 @@ export default function Page() {
           {products.map((p, i) => (
             <Reveal key={p.slug} delay={(i % 3) * 80} className="h-full">
               <article className="glow-card flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-white">
-                <div className="relative h-52"><Image src={p.image} alt={p.imageAlt} width={700} height={450} loading="lazy" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="h-full w-full object-cover" />
+                <div className="relative h-52"><Image src={asset(p.image)} alt={p.imageAlt} width={700} height={450} loading="lazy" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="h-full w-full object-cover" />
                   <span className="absolute left-4 top-4 rounded-full bg-navy/85 px-3 py-1 text-xs font-bold uppercase tracking-widest text-cyan">{p.category}</span></div>
                 <div className="flex flex-1 flex-col p-6">
                   <h2 className="font-display break-words text-lg font-extrabold text-navy">{p.name}</h2>

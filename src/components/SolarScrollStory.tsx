@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { asset } from "@/lib/assets";
 
 /**
  * SolarScrollStory — cinematic scroll story WITHOUT pinning.
@@ -141,7 +142,7 @@ function Manifesto() {
         <div ref={stripRef} className="flex w-max gap-5 pr-10 will-change-transform" style={{ transform: "rotate(-6deg)" }}>
           {SITE_PHOTOS.slice(0, 8).map((img, i) => (
             <div key={`${img.src}-${i}`} className="h-44 w-64 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/15 sm:h-56 sm:w-80">
-              <Image src={img.src} alt={img.alt} width={640} height={440} loading="lazy" sizes="(max-width: 640px) 70vw, 320px" className="h-full w-full object-cover" />
+              <Image src={asset(img.src)} alt={img.alt} width={640} height={440} loading="lazy" sizes="(max-width: 640px) 70vw, 320px" className="h-full w-full object-cover" />
             </div>
           ))}
         </div>
@@ -226,7 +227,7 @@ function OrbitRing() {
                   style={{ transform: `rotate(${-angle}deg)` }}
                 >
                   <Image
-                    src={img.src}
+                    src={asset(img.src)}
                     alt={img.alt}
                     width={288}
                     height={320}
@@ -286,7 +287,7 @@ function PinnedChapters() {
                   <p className="mt-1 max-w-md break-words text-sm leading-relaxed text-white/60 sm:text-[15px]">{s.text}</p>
                 </div>
                 <div className={`w-40 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/15 sm:w-52 ${flip ? "sm:order-2 sm:justify-self-end" : ""}`}>
-                  <Image src={photo.src} alt={photo.alt} width={420} height={300} loading="lazy" sizes="208px" className="h-28 w-full object-cover sm:h-32" />
+                  <Image src={asset(photo.src)} alt={photo.alt} width={420} height={300} loading="lazy" sizes="208px" className="h-28 w-full object-cover sm:h-32" />
                 </div>
               </article>
             );

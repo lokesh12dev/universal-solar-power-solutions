@@ -4,6 +4,9 @@ import { products } from "@/content/products";
 import { projects } from "@/content/projects";
 import { articles } from "@/content/resources";
 
+// Required so the route prerenders under `output: "export"` (GitHub Pages).
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url.replace(/\/$/, "");
   const statics = ["/", "/residential-solar", "/commercial-solar", "/industrial-solar", "/products", "/projects", "/about", "/solar-savings-calculator", "/plan-my-solar", "/support", "/resources", "/knowledge", "/contact", "/privacy-policy", "/terms"];

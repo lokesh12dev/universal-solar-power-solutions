@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { track } from "@/lib/analytics";
+import { EXTERNAL_FORM_ENDPOINT, STATIC_PREVIEW, STATIC_NO_BACKEND_NOTICE, resolveFormEndpoint } from "@/lib/form-endpoint";
 import { Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 
 type Props = { compact?: boolean };
@@ -48,12 +49,22 @@ export function EnquiryForm({ compact }: Props) {
       return;
     }
 
+    // GitHub Pages static build without a connected backend: be explicit —
+    // validation already ran, and nothing is sent or faked.
+    const endpoint = resolveFormEndpoint("/api/enquiries");
+    if (!endpoint) {
+      setStatus("fail"); track("lead_form_fail");
+      setErrors({});
+      setResult(STATIC_NO_BACKEND_NOTICE);
+      return;
+    }
+
     busyRef.current = true;
     setStatus("sending"); track("lead_form_submit");
     setErrors({});
     setResult("");
     try {
-      const res = await fetch("/api/enquiries", {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -160,6 +171,9 @@ export function EnquiryForm({ compact }: Props) {
       </button>
       {status === "ok" && <p role="status" className="flex items-start gap-2 rounded-2xl bg-royal p-4 font-semibold text-cyan"><CheckCircle2 aria-hidden="true" className="mt-0.5 shrink-0" size={18} />{result}</p>}
       {status === "fail" && <p role="alert" className="flex items-start gap-2 rounded-2xl bg-red-50 p-4 font-semibold text-red-800"><AlertTriangle aria-hidden="true" className="mt-0.5 shrink-0" size={18} />{result}</p>}
+      {STATIC_PREVIEW && !EXTERNAL_FORM_ENDPOINT && (
+        <p className="rounded-xl border border-line bg-mist px-4 py-3 text-xs font-semibold text-slate">Static preview — this host has no enquiry backend, so the form cannot submit here. Please call or email us instead.</p>
+      )}
       <p className="text-xs text-slate">By submitting you agree to be contacted about your enquiry. We never publish your details. See <a className="underline" href="/privacy-policy">Privacy</a>.</p>
     </form>
   );

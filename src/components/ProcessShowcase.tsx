@@ -5,6 +5,7 @@ import { Reveal, Sequence, Step, Tilt, ScrollFill } from "@/components/effects";
 import { processSteps } from "@/content/services";
 import { site } from "@/config/site";
 import { telHref } from "@/lib/utils";
+import { asset } from "@/lib/assets";
 
 /* Process showcase — the old light 4-card flow rebuilt as a dark companion
    to FutureExperience: aurora + grid bg, energy rail with travelling comet,
@@ -42,7 +43,7 @@ export function ProcessShowcase() {
                     <article className="process-card">
                       <div className="relative z-[1] -mt-12 flex flex-col items-center">
                         <Image
-                          src={`/images/legacy/project${PHOTOS[i]}.jpeg`}
+                          src={asset(`/images/legacy/project${PHOTOS[i]}.jpeg`)}
                           alt={`Universal Solar Power Solutions site work step ${p.n}`}
                           width={160}
                           height={160}

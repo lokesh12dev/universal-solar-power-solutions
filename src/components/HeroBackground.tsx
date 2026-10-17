@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { asset } from "@/lib/assets";
 
 /* HeroBackground — owner-supplied solar-farm/turbine animation ("WhatsApp
    Video 2026-10-16 at 09.53.08 (1).mp4", remuxed stream-copy to strip audio).
@@ -15,7 +16,7 @@ const SRC = "/videos/solar-background.mp4";
 function StaticHero() {
   return (
     <Image
-      src={POSTER}
+      src={asset(POSTER)}
       alt=""
       width={768}
       height={432}
@@ -54,7 +55,7 @@ export function HeroBackground() {
     <>
       {/* Instant paint + no-JS fallback: sits under the video until it can play. */}
       <Image
-        src={POSTER}
+        src={asset(POSTER)}
         alt=""
         width={768}
         height={432}
@@ -65,7 +66,7 @@ export function HeroBackground() {
       />
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        poster={POSTER}
+        poster={asset(POSTER)}
         autoPlay
         muted
         loop
@@ -81,7 +82,7 @@ export function HeroBackground() {
           void v.play().catch(() => undefined);
         }}
       >
-        <source src={SRC} type="video/mp4" />
+        <source src={asset(SRC)} type="video/mp4" />
       </video>
     </>
   );

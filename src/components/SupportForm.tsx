@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { track } from "@/lib/analytics";
+import { EXTERNAL_FORM_ENDPOINT, STATIC_PREVIEW, STATIC_NO_BACKEND_NOTICE, resolveFormEndpoint } from "@/lib/form-endpoint";
 import { supportCategories } from "@/content/support";
 import type { SupportCategory } from "@/lib/validation";
 
@@ -10,18 +11,28 @@ export function SupportForm({ initialCategory = "general" as SupportCategory }: 
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "fail">("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [ref, setRef] = useState("");
+  const [failNotice, setFailNotice] = useState("");
   const sendingRef = useRef(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (sendingRef.current) return;
+    // GitHub Pages static build without a connected backend: never pretend —
+    // show the explicit notice instead of a doomed network call.
+    const endpoint = resolveFormEndpoint("/api/support-requests");
+    if (!endpoint) {
+      setStatus("fail");
+      setErrors({});
+      setFailNotice(STATIC_NO_BACKEND_NOTICE);
+      return;
+    }
     sendingRef.current = true;
-    setStatus("sending"); setErrors({});
+    setStatus("sending"); setErrors({}); setFailNotice("");
     const form = e.currentTarget;
     const fd = new FormData(form);
     const body = { ...Object.fromEntries(fd.entries()), category };
     try {
-      const res = await fetch("/api/support-requests", {
+      const res = await fetch(endpoint, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
@@ -115,7 +126,10 @@ export function SupportForm({ initialCategory = "general" as SupportCategory }: 
         {status === "sending" && <Loader2 size={18} className="animate-spin" aria-hidden="true" />}
         {status === "sending" ? "Submitting…" : "Submit Support Request"}
       </button>
-      {status === "fail" && <p role="alert" className="flex items-start gap-2 rounded-2xl bg-red-50 p-4 text-sm font-semibold text-red-800"><AlertTriangle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />Not confirmed — nothing was stored. Check errors above or retry; your entries are preserved.</p>}
+      {status === "fail" && <p role="alert" className="flex items-start gap-2 rounded-2xl bg-red-50 p-4 text-sm font-semibold text-red-800"><AlertTriangle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />{failNotice || "Not confirmed — nothing was stored. Check errors above or retry; your entries are preserved."}</p>}
+      {STATIC_PREVIEW && !EXTERNAL_FORM_ENDPOINT && (
+        <p className="rounded-xl border border-line bg-mist px-4 py-3 text-xs font-semibold text-slate">Static preview — this host has no support-request backend, so the form cannot submit here. Please call or email us instead.</p>
+      )}
       <p className="text-xs text-slate">We use your details only to handle this request. See <a className="underline" href="/privacy-policy">Privacy</a>.</p>
     </form>
   );
