@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Env + secrets — never commit real values. Only .env.example is tracked.
+.env
+.env*.local
+.env.development
+.env.production
+
+# Enquiry queue (contains PII) — git-ignored by design.
+# See src/lib/store.ts queueEnquiry(). Without RESEND_* configured,
+# POST /api/enquiries writes to data/enquiries/*.json for manual review.
+data/enquiries/
+data/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# ffmpeg two-pass encoder artifacts (regenerable)
+ffmpeg2pass-*
+
+# Vercel
+.vercel

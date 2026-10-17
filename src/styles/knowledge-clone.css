@@ -1,0 +1,94 @@
+/* Scoped clone of reference knowledge design — dark editorial theme.
+   Intentionally isolated under .knowledge-clone so the rest of the light site is untouched. */
+
+.knowledge-clone {
+  --kc-bg: #080e15;
+  --kc-secondary: #111d29;
+  --kc-border: #30363b;
+  --kc-fg: #f3f2ef;
+  --kc-muted: #a5adb2;
+  --kc-accent: #dbb977;
+  --kc-gutter: clamp(24px, 5.2vw, 88px);
+  background: var(--kc-bg);
+  color: var(--kc-fg);
+  font-family: var(--font-display), Manrope, ui-sans-serif, system-ui, sans-serif;
+}
+
+.knowledge-clone p { color: var(--kc-muted); font-size: 15px; line-height: 1.85; }
+
+.kc-shell { padding-inline: var(--kc-gutter); max-width: 1800px; margin-inline: auto; }
+.kc-accent { color: var(--kc-accent); }
+.kc-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.1em; font-size: 10px; line-height: 1.7;
+}
+
+.kc-eyebrow {
+  display: flex; align-items: center; gap: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.1em; font-size: 10px; color: var(--kc-muted);
+}
+.kc-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--kc-accent); box-shadow: 0 0 0 4px #b49a7012; display: inline-block; }
+
+.kc-intro { padding-top: 72px; padding-bottom: 80px; }
+.kc-intro h1 {
+  margin-top: 32px;
+  font-size: clamp(58px, 8vw, 120px);
+  letter-spacing: -0.065em; line-height: 1.08; font-weight: 400; color: var(--kc-fg);
+  text-wrap: balance;
+}
+.kc-intro-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 50px;
+  border-top: 1px solid var(--kc-border); margin-top: 40px; padding-top: 35px;
+}
+.kc-intro-bottom p { max-width: 470px; font-size: 15px; }
+
+.kc-body { padding-bottom: 100px; }
+
+.kc-controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; margin-bottom: 35px; }
+.kc-tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--kc-border); }
+.kc-tabs button {
+  color: var(--kc-muted); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 22px 24px; font-size: 12px;
+  min-height: 44px;
+}
+.kc-tabs button[aria-pressed="true"] {
+  color: var(--kc-accent); border-bottom-color: var(--kc-accent); background: #dbb97708;
+}
+.kc-tabs button:hover { background: #ffffff08; }
+
+.kc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.kc-grid article { border: 1px solid var(--kc-border); padding: 35px; background: transparent; }
+.kc-grid h2, .kc-official h2 {
+  letter-spacing: -0.03em; margin: 20px 0; font-size: 29px; line-height: 1.4; font-weight: 400; color: var(--kc-fg);
+}
+.kc-grid p, .kc-official p { font-size: 14px; }
+.kc-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-bottom: 1px solid #6c7378; padding-block: 8px; font-size: 12px; line-height: 1.6;
+  color: var(--kc-fg); margin-top: 30px; margin-right: 22px;
+}
+.kc-link:hover { color: var(--kc-accent); border-color: var(--kc-accent); }
+button.kc-link { background: transparent; border: 0; border-bottom: 1px solid #6c7378; cursor: pointer; }
+
+.kc-official { border: 1px solid var(--kc-accent); margin-top: 35px; padding: 40px; }
+.kc-official .kc-link { display: inline-flex; margin-top: 22px; }
+
+.kc-empty { border: 1px solid var(--kc-border); margin: 30px 0; padding: 45px; }
+.kc-empty h2 { font-size: 26px; margin-bottom: 20px; font-weight: 400; }
+
+.kc-clone-note { margin-top: 32px; font-size: 11px !important; line-height: 1.8 !important; }
+.kc-clone-note a { color: var(--kc-accent); text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 760px) {
+  .kc-intro { padding-top: 48px; padding-bottom: 55px; }
+  .kc-intro h1 { font-size: clamp(47px, 11vw, 80px); }
+  .kc-intro-bottom { align-items: flex-start; gap: 30px; margin-top: 30px; padding-top: 25px; }
+  .kc-intro-bottom p { font-size: 12px; }
+  .kc-controls { display: block; }
+  .kc-controls > .kc-tabs { margin-bottom: 20px; overflow-x: auto; flex-wrap: nowrap; }
+  .kc-tabs button { white-space: nowrap; flex-shrink: 0; padding: 18px 15px; }
+  .kc-grid { grid-template-columns: 1fr; }
+  .kc-grid article, .kc-official { padding: 25px; }
+  .kc-body { padding-bottom: 65px; }
+}
