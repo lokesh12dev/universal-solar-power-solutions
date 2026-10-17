@@ -3,17 +3,29 @@ import path from "path";
 
 export type StoredEnquiry = Record<string, unknown> & { id: string; receivedAt: string };
 
-// File-queue fallback: honest "accepted for review" state when no CRM/email is configured.
-// Writes JSON files under data/<subdir>/ (git-ignored). Never logs PII to console.
-export async function queueRecord(data: Record<string, unknown>, subdir: string): Promise<StoredEnquiry> {
+// Honeypot is stripped here so it is never stored or emailed.
+export function buildRecord(data: Record<string, unknown>): StoredEnquiry {
   const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const record: StoredEnquiry = { ...data, id, receivedAt: new Date().toISOString() };
+  const { company: _h, ...rest } = record as Record<string, unknown>;
+  return { ...rest, id, receivedAt: record.receivedAt } as StoredEnquiry;
+}
+
+// File-queue persistence: JSON files under data/<subdir>/ (git-ignored).
+// Local dev: always writable. Serverless hosts (Vercel) have a READ-ONLY
+// filesystem — callers must treat a throw here as non-fatal and lean on the
+// email path; see src/app/api/*/route.ts.
+export async function persistRecord(record: StoredEnquiry, subdir: string): Promise<void> {
   const dir = path.join(process.cwd(), "data", subdir);
   await fs.mkdir(dir, { recursive: true });
-  // Strip honeypot before storing
-  const { company: _h, ...rest } = record as Record<string, unknown>;
-  await fs.writeFile(path.join(dir, `${id}.json`), JSON.stringify({ ...rest, id }, null, 2), "utf8");
-  return { ...rest, id, receivedAt: record.receivedAt } as StoredEnquiry;
+  await fs.writeFile(path.join(dir, `${record.id}.json`), JSON.stringify(record, null, 2), "utf8");
+}
+
+// Kept for compatibility (same behavior as before the split).
+export async function queueRecord(data: Record<string, unknown>, subdir: string): Promise<StoredEnquiry> {
+  const record = buildRecord(data);
+  await persistRecord(record, subdir);
+  return record;
 }
 
 export async function queueEnquiry(data: Record<string, unknown>): Promise<StoredEnquiry> {

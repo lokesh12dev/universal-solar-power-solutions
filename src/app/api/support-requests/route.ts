@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supportRequestSchema } from "@/lib/validation";
-import { queueSupportRequest, trySendEmail } from "@/lib/store";
+import { buildRecord, persistRecord, trySendEmail } from "@/lib/store";
 import { checkRateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
@@ -25,13 +25,24 @@ export async function POST(req: Request) {
     for (const iss of parsed.error.issues) errors[String(iss.path[0] ?? "form")] = iss.message;
     return NextResponse.json({ message: "Please fix the highlighted fields.", errors }, { status: 422 });
   }
+  // Same channel-independence as /api/enquiries: a read-only filesystem
+  // (Vercel) must not block the email path.
+  const record = buildRecord(parsed.data as Record<string, unknown>);
+  let stored = false;
   try {
-    const record = await queueSupportRequest(parsed.data as Record<string, unknown>);
-    const email = await trySendEmail(record, `New support request [${parsed.data.category}] — ${parsed.data.pincode || "no PIN"}`);
-    return NextResponse.json({ id: record.id, emailSent: email.sent, emailStatus: email.reason }, { status: 201 });
+    await persistRecord(record, "support-requests");
+    stored = true;
   } catch {
-    return NextResponse.json({ message: "Could not accept your request right now. Please call us directly." }, { status: 500 });
+    // read-only filesystem — email path below still applies
   }
+  const email = await trySendEmail(record, `New support request [${parsed.data.category}] — ${parsed.data.pincode || "no PIN"}`);
+  if (!stored && !email.sent) {
+    return NextResponse.json(
+      { message: "Could not accept your request right now. Please call us directly.", stored, emailSent: email.sent, emailStatus: email.reason },
+      { status: 500 }
+    );
+  }
+  return NextResponse.json({ id: record.id, stored, emailSent: email.sent, emailStatus: email.reason }, { status: 201 });
 }
 
 export async function GET() {
