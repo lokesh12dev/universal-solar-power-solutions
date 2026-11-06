@@ -14,7 +14,9 @@ export type AnalyticsEvent =
   | "planner_start"
   | "planner_complete"
   | "consultation_request"
-  | "calculator_completed";
+  | "calculator_completed"
+  | "service_request_submitted"
+  | "project_case_study_viewed";
 
 const queue: { event: AnalyticsEvent; page: string }[] = [];
 
